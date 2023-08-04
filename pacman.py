@@ -25,6 +25,7 @@ player_x = 335
 player_y = 520
 direction = 0
 counter = 0
+flicker = False
 
 def draw_board():
     #height and width of each tile/piece
@@ -37,7 +38,7 @@ def draw_board():
             #1 small circle, 2 powerup
             if level[i][j] == 1:
                 pygame.draw.circle(screen, 'white', (j * num2 + (0.5*num2), i * num1 + (0.5 * num1)), 4 * .8)
-            if level[i][j] == 2:
+            if level[i][j] == 2 and not flicker:
                 pygame.draw.circle(screen, 'white', (j * num2 + (0.5*num2), i * num1 + (0.5 * num1)), 10 * .8)
             #3 Vertical, 4 Horizontal
             if level[i][j] == 3:
@@ -73,12 +74,19 @@ while run:
     timer.tick(fps)
     if counter < 19:
         counter += 1
+        if counter > 7:
+            flicker = False
     else:
         counter = 0
+        flicker = True
 
     screen.fill('black')
     draw_board()
     draw_player()
+    center_x = player_x + 19
+    center_y = player_y + 20
+    pygame.draw.circle(screen, 'green', (center_x, center_y), 2)
+    #check_position()
 
     #condition to exit the loop
     for event in pygame.event.get():
